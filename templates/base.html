@@ -30,7 +30,14 @@
 
   <!-- Main CSS File -->
   <link href={% static 'css/main.css' %} rel="stylesheet">
-
+  <!-- jQuery -->
+  <script src={% static 'js/jquery-3.7.1.min.js' %} rel="stylesheet"> </script>
+  
+  <script src={% static 'js/functions.js' %} rel="stylesheet"> </script>
+  <!-- Jquery Confirm -->
+  <script src="{% static 'lib/jquery-confirm-3.3.4/jquery-confirm.min.js' %}"></script>
+  <!-- Sweetalert2 -->
+  <script src="{% static 'lib/sweetalert2-11.0.16/sweetalert2.all.min.js' %}"></script>
   <!-- =======================================================
   * Template Name: AgriCulture
   * Template URL: https://bootstrapmade.com/agriculture-bootstrap-website-template/
@@ -38,11 +45,11 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
-</head>
 {% block head %}
 
 {% endblock %}
 
+</head>
 {% block body %}
 
 <body class="index-page">

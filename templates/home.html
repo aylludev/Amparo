@@ -1,51 +1,40 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <title>Bootstrap 5 Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href={% static 'lib/bootstrap-5.3.3/dist/css/bootstrap.min.css' %} rel="stylesheet">
-  <script src={% static 'lib/bootstrap-5.3.3/dist/js/bootstrap.bundle.min.js' %}></script>
-  <script src={% static 'lib/AdminLTE-4.0.0/dist/js/bootstrap.bundle.min.js' %}></script>
-  <script src={% static 'js/jquery-3.7.1.min.js' %}></script>
-  <script src={% static 'js/popper.min.js' %}></script>
-  {% block head %}
-  
-  {% endblock %}
-</head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="icon" href="{% static 'img/empty.png' %}" type="image/png"/>
+    <title>{{ title }}</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{% static 'lib/fontawesome-5.15.3/css/all.min.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'lib/adminlte-3.1.0/css/adminlte.min.css' %}">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="{% static 'lib/bootstrap-4.6.0/js/jquery.min.js' %}"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{% static 'lib/bootstrap-4.6.0/js/popper.min.js' %}"></script>
+    <script src="{% static 'lib/bootstrap-4.6.0/js/bootstrap.min.js' %}"></script>
+    <!-- AdminLTE App -->
+    <script src="{% static 'lib/adminlte-3.1.0/js/adminlte.min.js' %}"></script>
+    <!-- Sweetalert2 -->
+    <script src="{% static 'lib/sweetalert2-11.0.16/sweetalert2.all.min.js' %}"></script>
+    <!-- Jquery Confirm -->
+    <link rel="stylesheet" href="{% static 'lib/jquery-confirm-3.3.4/jquery-confirm.min.css' %}">
+    <script src="{% static 'lib/jquery-confirm-3.3.4/jquery-confirm.min.js' %}"></script>
+    <!-- My css -->
+    <link rel="stylesheet" href="{% static 'css/mystyle.css' %}">
+    <!-- Functions -->
+    <script src="{% static 'js/functions.js' %}"></script>
+    <!-- Block head -->
+    {% block head %}
 
-<body>
+    {% endblock %}
+</head>
 {% block body %}
 
-  <div class="container-fluid p-5 bg-primary text-white text-center">
-    <h1>My First Bootstrap Page</h1>
-    <p>Resize this responsive page to see the effect!</p>
-  </div>
-
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-sm-4">
-        <h3>Column 1</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-      </div>
-      <div class="col-sm-4">
-        <h3>Column 2</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-      </div>
-      <div class="col-sm-4">
-        <h3>Column 3</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-      </div>
-    </div>
-  </div>
-
 {% endblock %}
-</body>
-
 </html>

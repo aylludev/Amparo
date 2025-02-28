@@ -131,6 +131,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
-LOGIN_REDIRECT_URL = "/dashboard/"  # Cambia esto según tu aplicación
+LOGIN_REDIRECT_URL = "/erp/dashboard/"  # Cambia esto según tu aplicación
 
 AUTH_USER_MODEL = 'accounts.CustomUser'

@@ -1,8 +1,12 @@
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView, CreateView
 from Amparo import settings
 from django.contrib.auth import login, logout
+from accounts.forms import UserForm
+from accounts.models import CustomUser
+from django.urls import reverse_lazy
+from django.http import JsonResponse
 # Create your views here.
 
 class LoginFormView(LoginView):
@@ -24,3 +28,34 @@ class LogoutView(RedirectView):
     def dispatch(self, request, *args, **kwargs):
         logout(request)
         return super().dispatch(request, *args, **kwargs)
+
+class UserCreateView(CreateView):
+    model = CustomUser
+    form_class = UserForm
+    template_name = 'register.html'
+    success_url = reverse_lazy('accounts/login')
+    url_redirect = success_url
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'add':
+                form = self.get_form()
+                data = form.save()
+            else:
+                data['error'] = 'No ha ingresado a ninguna opción'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Registro Usuarios'
+        context['entity'] = 'Usuarios'
+        context['list_url'] = self.success_url
+        context['action'] = 'add'
+        return context
