@@ -1,0 +1,34 @@
+<!-- templates/farm_detail.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Detalles de la Finca</title>
+</head>
+
+<body>
+  <h1>Detalles de la Finca: {{ farm.name }}</h1>
+  <p>País: {{ farm.country }}</p>
+  <p>Departamento: {{ farm.department }}</p>
+  <p>Municipio: {{ farm.municipality }}</p>
+  <p>Dirección: {{ farm.address }}</p>
+  <p>Área: {{ farm.area }} ha</p>
+
+  <h2>Cultivos</h2>
+  <ul>
+    {% for cultivo in cultivos %}
+    <li>{{ cultivo.name }}</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Actividades</h2>
+  <ul>
+    {% for actividad in actividades %}
+    <li>{{ actividad.descripcion }} - {{ actividad.fecha }}</li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'farm_list' %}">Volver a la Lista de Fincas</a>
+</body>
+
+</html>

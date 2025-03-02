@@ -37,8 +37,6 @@ class ValidatePermissionRequiredMixin(object):
         return self.url_redirect
 
     def dispatch(self, request, *args, **kwargs):
-        request = get_current_request()
-        print(request)
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
         if 'group' in request.session:

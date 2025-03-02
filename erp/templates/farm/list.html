@@ -1,0 +1,70 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block appcontent %}
+
+<div class="container-fluid">
+  <div class="row">
+    {% for farm in farms %}
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box bg-primary">
+        <div class="inner">
+          <a href={% url 'erp:farm_edit' farm.pk %} class="btn btn-success btn-xs btn-flat"><i
+              class="fas fa-edit"></i></a>
+          <a href={% url 'erp:farm_delete' farm.pk %} class="btn btn-danger btn-xs btn-flat"><i
+              class="fas fa-trash"></i></a>
+          <h3>{{ farm.name }}<sup style="font-size: 20px"></sup></h3>
+          <p>{{ farm.municipality }}/{{ farm.address }}</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-home"></i>
+        </div>
+        <a href={% url 'erp:farm_list' %} class="small-box-footer">Administrar Finca <i
+            class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    {% endfor %}
+    <a href="{% url 'erp:farm_add' %}">Crear nueva Finca</a>
+
+    <form method="post" action="." enctype="multipart/form-data">
+      <div class="card-body">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="{{ action }}">
+        {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error al querer guardar el registro</h5>
+          <ul>
+            {% for field in form %}
+            {% for error in field.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+  </div>
+  </form>
+</div>
+</div>
+<script>
+  {% if form.errors %}
+  var errors = '';
+  {% for field in form %}
+  {% for error in field.errors %}
+  errors += '{{ error }}\n';
+  {% endfor %}
+  {% endfor %}
+  {% for error in form.non_field_errors %}
+  errors += '{{ error }}\n';
+  {% endfor %}
+  Swal.fire({
+    title: 'Error!',
+    text: errors,
+    icon: 'error'
+  });
+  {% endif %}
+</script>
+{% endblock %}

@@ -3,36 +3,14 @@ from django.forms import ModelForm
 from erp.models import Farm 
 
 class FarmForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs['autofocus'] = True
 
     class Meta:
         model = Farm
-        fields = '__all__'
+        fields = ['name', 'department', 'municipality', 'address', 'area']
         widgets = {
-            'name': forms.TextInput(
-                attrs={
-                    'placeholder': 'Ingrese un nombre',
-                }
-            ),
-            'cat': forms.Select(
-                attrs={
-                    'class': 'select2',
-                    'style': 'width: 100%'
-                }
-            ),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese un nombre'}),
+            'department': forms.Select(attrs={'id': 'department-select', 'class': 'select2 form-control', 'style': 'width: 100%'}),
+            'municipality': forms.Select(attrs={'id': 'municipality-select', 'class': 'select2 form-control', 'style': 'width: 100%'}),
+            'address': forms.TextInput(attrs={'class': 'form-control',}),
+            'area': forms.NumberInput(attrs={'class': 'form-control',}),
         }
-
-    def save(self, commit=True):
-        data = {}
-        form = super()
-        try:
-            if form.is_valid():
-                form.save()
-            else:
-                data['error'] = form.errors
-        except Exception as e:
-            data['error'] = str(e)
-        return data
-
