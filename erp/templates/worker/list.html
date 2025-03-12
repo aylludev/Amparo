@@ -5,23 +5,21 @@
 
 <div class="container-fluid">
   <div class="row">
-    {% for crop in crops %}
+    {% for worker in workers %}
     <div class="col-lg-3 col-6">
       <!-- small box -->
       <div class="small-box bg-primary">
         <div class="inner">
-          <a href={% url 'erp:crop_edit' crop.pk %} class="btn btn-success btn-xs btn-flat"><i
+          <a href={% url 'erp:worker_edit' worker.pk %} class="btn btn-success btn-xs btn-flat"><i
               class="fas fa-edit"></i></a>
-          <a href={% url 'erp:crop_delete' crop.pk %} class="btn btn-danger btn-xs btn-flat"><i
+          <a href={% url 'erp:worker_delete' worker.pk %} class="btn btn-danger btn-xs btn-flat"><i
               class="fas fa-trash"></i></a>
-          <h3>{{ crop.name }}<sup style="font-size: 20px"></sup></h3>
-          <p>{{ crop.variety }}/{{ crop.area }} Ha</p>
+          <h3>{{ worker.name }}<sup style="font-size: 20px"></sup></h3>
+          <p>{{ worker.phone }}/{{ worker.salary }}</p>
         </div>
         <div class="icon">
-          <i class="fas fa-home"></i>
+          <i class="fas fa-user"></i>
         </div>
-        <a href={% url 'erp:crop_detail' crop.pk %} class="small-box-footer">Administrar Cultivo <i
-            class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     {% endfor %}
@@ -29,13 +27,12 @@
       <!-- small box -->
       <div class="small-box btn-success">
         <div class="inner"> <br>
-          <h3>Crear un Cultivo<sup style="font-size: 20px"></sup></h3>
-          <p><br></p>
+          <h3>Registre un trabajador<sup style="font-size: 20px"></sup></h3>
         </div>
         <div class="icon">
-          <i class="fas fa-home"></i>
+          <i class="fas fa-plus"></i>
         </div>
-        <a href={% url 'erp:crop_add' farm.pk %} class="small-box-footer">Nuevo Cultivo <i
+        <a href={% url 'erp:worker_add' %} class="small-box-footer"> Nuevo Trabajador  <i
             class="fas fa-plus"></i></a>
       </div>
     </div>

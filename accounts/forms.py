@@ -2,6 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from accounts.models import CustomUser
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import Group
 
 class UserForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -32,6 +33,7 @@ class UserForm(ModelForm):
                 attrs={'placeholder': 'Ingrese numero de telefono',}
             ),
         }
+
         labels = {
             'first_name':'Nombres',
             'last_name':'Apellidos',
@@ -42,35 +44,24 @@ class UserForm(ModelForm):
 
         }
         exclude = ['user_permissions', 'last_login', 'date_joined', 'is_superuser', 'is_active', 'is_staff']
-
+    
     def save(self, commit=True):
-        data = {}
-        try:
-            u = super(UserForm, self).save(commit=False)  # ✅ Correcto
-            pwd = self.cleaned_data['password']
+        user = super().save(commit=False)
+        pwd = self.cleaned_data['password']
 
-            # Si el usuario es nuevo, encripta la contraseña
-            if u.pk is None:
-                u.password = make_password(pwd)
-            else:
-                user = CustomUser.objects.get(pk=u.pk)
-                if user.password != pwd:  # Si cambió la contraseña, la encripta
-                    u.password = make_password(pwd)
+        # 🔹 Encripta la contraseña si el usuario es nuevo
+        if user.pk is None:
+            user.password = make_password(pwd)
 
-            if commit:
-                u.save()
+        if commit:
+            user.save()
 
-            # Manejo de grupos si existen en el formulario
-            if 'groups' in self.cleaned_data:
-                u.groups.clear()
-                for g in self.cleaned_data['groups']:
-                    u.groups.add(g)
+            # 🔹 Asignar el grupo por defecto después de guardar
+            vendor_group, created = Group.objects.get_or_create(name="vendor")
+            user.groups.add(vendor_group)  
 
-            return u  # ✅ Devuelve el usuario creado/modificado
-
-        except Exception as e:
-            data['error'] = str(e)
-            return data  # ✅ Devuelve error en caso de fallo
+        return user
+    
 
 class UserProfileForm(ModelForm):
     def __init__(self, *args, **kwargs):

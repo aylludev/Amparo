@@ -39,19 +39,29 @@ class Crop(models.Model):
     def __str__(self):
         return f"{self.name} - {self.variety if self.variety else 'Genérico'} ({self.farm.name})"
 
+class Worker(models.Model):
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    salary = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    hired_date = models.DateField()
+
+    def __str__(self):
+        return self.name
+
 class Activity(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('in_progress', 'In Progress'),
-        ('completed', 'Completed'),
+        ('pending', 'Pendiente'),
+        ('in_progress', 'En progreso'),
+        ('completed', 'Completado'),
     ]
     
-    farm = models.ForeignKey(Farm, on_delete=models.CASCADE, related_name="activities")
+    crop = models.ForeignKey('Crop', on_delete=models.CASCADE, related_name="activities", null=True, blank=True)
+    name = models.CharField(max_length=100, verbose_name="Actividad")
     description = models.TextField()
     type = models.CharField(max_length=50)  # Example: 'Planting', 'Harvesting'
     date = models.DateField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    responsible = models.CharField(max_length=100, blank=True, null=True)  # Could be a worker
+    workers = models.ManyToManyField(Worker, related_name='Trabajadores')  # Could be a worker
 
     def __str__(self):
         return f"{self.description} - {self.get_status_display()}"
@@ -64,14 +74,3 @@ class Supply(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.quantity} {self.unit})"
-
-class Worker(models.Model):
-    farm = models.ForeignKey(Farm, on_delete=models.CASCADE, related_name="workers")
-    name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=20, blank=True, null=True)
-    salary = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    hired_date = models.DateField()
-
-    def __str__(self):
-        return self.name
-

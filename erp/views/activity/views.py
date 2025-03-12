@@ -1,57 +1,59 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
-from erp.forms import CropForm
-from erp.models import Activity, Farm, Crop
+from erp.forms import ActivityForm, CropForm
+from erp.models import Farm, Crop, Activity
 from django.urls import reverse_lazy
 from erp.mixins import ValidatePermissionRequiredMixin
 from django.http import JsonResponse
 
-class CropListView(LoginRequiredMixin, DetailView):
-    model = Farm
-    template_name = 'crop/list.html'
-    context_object_name = 'farm'
+class ActivityListView(LoginRequiredMixin, DetailView):
+    model = Activity
+    template_name = 'activity/list.html'
+    context_object_name = 'activity'
 
+    def get_queryset(self):
+        crop_id = self.kwargs.get('pk')
+        return Activity.objects.filter(crop=crop_id)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        farm = self.get_object()
-        context['crops'] = Crop.objects.filter(farm_id=farm)
+        crop = self.get_object()
+        context['activity'] = Activity.objects.filter(farm_id=crop)
         return context
 
-class CropCreateView(LoginRequiredMixin, CreateView):
-    model = Crop
-    form_class = CropForm
-    template_name = 'crop/create.html'
+class ActivityCreateView(LoginRequiredMixin, CreateView):
+    model = Activity
+    form_class = ActivityForm
+    template_name = 'activity/create.html'
     success_url = reverse_lazy('erp:farm_list')
     permission_required = 'add_farm'
     
     def form_valid(self, form):
         data = {}
         try:
-            farm_id = self.kwargs.get('pk')  # Obtener el ID de la finca desde la URL
-            if not farm_id:
+            crop_id = self.kwargs.get('pk')  # Obtener el ID de la finca desde la URL
+            if not crop_id:
                 raise ValueError("No se ha proporcionado un ID de finca válido.")
-            farm = Farm.objects.get(id=farm_id)  # Buscar la finca en la BD
-            crop = form.save(commit=False)  # No guardar aún
-            crop.farm = farm  # Asignar la finca al cultivo
-            crop.save()  # Guardar el cultivo
+            crop = Crop.objects.get(id=crop_id)  # Buscar la finca en la BD
+            activity = form.save(commit=False)  # No guardar aún
+            activity.crop = crop  # Asignar la finca al cultivo
+            activity.save()  # Guardar el cultivo
         except Exception as e:
             data['error'] = str(e) 
         return super().form_valid(form)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Creación un Cultivo'
+        context['title'] = 'Creación de una Actividad'
         context['entity'] = 'Fincas'
-        farm_id = self.kwargs.get('pk')
-        context['farm'] = Farm.objects.get(id=farm_id)
         context['action'] = 'add'
         return context
 
-class CropUpdateView(LoginRequiredMixin, UpdateView):
-    model = Crop
-    form_class = CropForm
-    template_name = 'farm/create.html'
+class ActivityUpdateView(LoginRequiredMixin, UpdateView):
+    model = Activity
+    form_class = ActivityForm
+    template_name = 'activity/create.html'
     success_url = reverse_lazy('erp:farm_list')
     url_redirect = success_url
 
@@ -63,10 +65,10 @@ class CropUpdateView(LoginRequiredMixin, UpdateView):
         context['action'] = 'edit'
         return context
 
-class CropDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DeleteView):
+class ActivityDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DeleteView):
     model = Crop
-    template_name = 'farm/delete.html'
-    permission_required = 'delete_crop'
+    template_name = 'activity/delete.html'
+    permission_required = 'delete_activity'
 
     def post(self, request, *args, **kwargs):
         data = {}
@@ -83,19 +85,7 @@ class CropDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Delete
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Eliminación de un Cultivo'
-        context['entity'] = 'Cultivos'
+        context['title'] = 'Eliminación de una Actividad'
+        context['entity'] = 'Actividad'
         context['list_url'] = self.success_url
-        return context
-
-class CropDetailView(LoginRequiredMixin, DetailView):
-    model = Crop
-    template_name = 'activity/list.html'
-    context_object_name = 'crop'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        crop = self.get_object()
-        context['activitys'] = Activity.objects.filter(crop_id=crop)
-        context['total_activitys'] = len(context['activitys'])
         return context

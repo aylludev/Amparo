@@ -20,14 +20,25 @@
         <div class="icon">
           <i class="fas fa-home"></i>
         </div>
-        <a href={% url 'erp:farm_list' %} class="small-box-footer">Administrar Finca <i
+        <a href={% url 'erp:farm_detail' farm.pk %} class="small-box-footer">Administrar Finca <i
             class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     {% endfor %}
-    <a href="{% url 'erp:farm_add' %}">Crear nueva Finca</a>
-
-    <form method="post" action="." enctype="multipart/form-data">
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box btn-success">
+        <div class="inner"> <br>
+          <h3>Crear una Finca<sup style="font-size: 20px"></sup></h3>
+          <p><br></p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-home"></i>
+        </div>
+        <a href={% url 'erp:farm_add' %} class="small-box-footer">Nueva Finca <i
+            class="fas fa-plus"></i></a>
+      </div>
+    </div>
       <div class="card-body">
         {% csrf_token %}
         <input type="hidden" name="action" value="{{ action }}">
@@ -46,7 +57,6 @@
         {% endif %}
       </div>
   </div>
-  </form>
 </div>
 </div>
 <script>

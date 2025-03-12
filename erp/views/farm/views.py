@@ -1,13 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from erp.forms import FarmForm
 from erp.mixins import ValidatePermissionRequiredMixin
-from erp.models import Farm
-from erp.services import get_departments
+from erp.models import Crop, Farm
 
 class FarmListView(LoginRequiredMixin, ListView):
     model = Farm
@@ -19,7 +15,7 @@ class FarmListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Listado de Clientes'
+        context['title'] = 'Listado de Fincas'
         context['create_url'] = reverse_lazy('erp:farm_list')
         context['list_url'] = reverse_lazy('erp:farm_list')
         context['entity'] = 'Fincas'
@@ -30,7 +26,7 @@ class FarmCreateView(LoginRequiredMixin, CreateView):
     model = Farm
     form_class = FarmForm
     template_name = 'farm/create.html'
-    success_url = reverse_lazy('erp:dashboard')
+    success_url = reverse_lazy('erp:farm_list')
     permission_required = 'add_farm'
     url_redirect = success_url
     
@@ -62,17 +58,30 @@ class FarmUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
 
-class FarmDeleteView(LoginRequiredMixin, DeleteView):
+class FarmDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DeleteView):
     model = Farm
     template_name = 'farm/delete.html'
     success_url = reverse_lazy('erp:farm_list')
     permission_required = 'delete_farm'
     url_redirect = success_url
+    permission_required = 'farm.delete_farm'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Eliminación de una Finca'
         context['entity'] = 'Fincas'
         context['list_url'] = self.success_url
+        return context
+
+class FarmDetailView(LoginRequiredMixin, DetailView):
+    model = Farm
+    template_name = 'farm/detail.html'
+    context_object_name = 'farm'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        farm = self.get_object()
+        context['crops'] = Crop.objects.filter(farm_id=farm)
+        context['total_crops'] = len(context['crops'])
         return context
 
