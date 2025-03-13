@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from erp.models import Crop, Farm, Activity, Worker
+from erp.models import Animal, Crop, Farm, Activity, Worker
 
 class FarmForm(ModelForm):
 
@@ -27,6 +27,21 @@ class CropForm(ModelForm):
             'status': forms.Select(attrs={'class': 'form-control',}),
             'area': forms.NumberInput(attrs={'class': 'form-control',}),
             'planting_date': forms.DateInput(attrs={'class': 'form-control',}),
+        }
+
+class AnimalForm(ModelForm):
+
+    class Meta:
+        model = Animal
+        fields = ['name', 'raza', 'type', 'status', 'age', 'birthday_date', 'observations']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese un nombre'}),
+            'raza': forms.TextInput(attrs={'id': 'department-select', 'class': 'select2 form-control', 'style': 'width: 100%'}),
+            'type': forms.Select(attrs={'class': 'select2 form-control', 'style': 'width: 100%'}),
+            'status': forms.Select(attrs={'class': 'form-control',}),
+            'age': forms.NumberInput(attrs={'class': 'form-control',}),
+            'birthday_date': forms.DateInput(attrs={'class': 'form-control',}),
+            'observations': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Observaciones'}),
         }
 
 class WorkerForm(ModelForm):

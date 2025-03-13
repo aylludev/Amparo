@@ -4,6 +4,7 @@ from erp.views.farm.views import *
 from erp.views.crop.views import *
 from erp.views.worker.views import *
 from erp.views.activity.views import *
+from erp.views.animal.views import *
 
 app_name = 'erp'
 
@@ -22,6 +23,12 @@ urlpatterns = [
     path('crops/delete/<int:pk>/', CropDeleteView.as_view(), name='crop_delete'),
     path('crops/update/<int:pk>/', CropUpdateView.as_view(), name='crop_edit'),
     path('crops/detail/<int:pk>/', CropDetailView.as_view(), name='crop_detail'),
+    # animals 
+    path('farm/<int:pk>/animals/', AnimalListView.as_view(), name='animal_list'),
+    path('farm/<int:pk>/animals/add/', AnimalCreateView.as_view(), name='animal_add'),
+    path('animals/delete/<int:pk>/', AnimalDeleteView.as_view(), name='animal_delete'),
+    path('animals/update/<int:pk>/', AnimalUpdateView.as_view(), name='animal_edit'),
+    path('animals/detail/<int:pk>/', AnimalDetailView.as_view(), name='animal_detail'),
     # workers
     path('worker/list/', WorkerListView.as_view(), name='worker_list'),
     path('worker/add/', WorkerCreateView.as_view(), name='worker_add'),

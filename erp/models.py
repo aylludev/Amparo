@@ -39,6 +39,24 @@ class Crop(models.Model):
     def __str__(self):
         return f"{self.name} - {self.variety if self.variety else 'Genérico'} ({self.farm.name})"
 
+class Animal(models.Model):
+    farm = models.ForeignKey('Farm', on_delete=models.CASCADE, related_name='animal')
+    name = models.CharField(max_length=100, verbose_name="Nombre del Animal")
+    raza = models.CharField(max_length=100, verbose_name="Raza", blank=True, null=True)
+    type = models.CharField(max_length=50, choices=[('bovino', 'Bovino'), ('no_perenne', 'No Perenne')], verbose_name="Tipo")
+    age = models.FloatField(verbose_name="Edad (meses)")
+    status = models.CharField(max_length=50, choices=[('activo', 'Activo'), ('cosechado', 'Cosechado'), ('en_produccion', 'En Producción')], default='activo', verbose_name="Estado")
+    birthday_date = models.DateField(verbose_name="Fecha de nacimiento")
+    observations = models.TextField(verbose_name="Observaciones", blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Animal"
+        verbose_name_plural = "Animales"
+        ordering = ['name']
+
+    def __str__(self):
+        return f"{self.name}"
+
 class Worker(models.Model):
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=20, blank=True, null=True)
@@ -69,6 +87,14 @@ class Activity(models.Model):
 class Supply(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name="supplies")
     name = models.CharField(max_length=100)
+    categoria = models.CharField(max_length=50, choices=[
+        ('fertilizante', 'Fertilizante'),
+        ('pesticida', 'Pesticida'),
+        ('alimento', 'Alimento para animales'),
+        ('semilla', 'Semilla'),
+        ('medicamento', 'Medicamento para animales'),
+        ('otros', 'Otros')
+    ])
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
     unit = models.CharField(max_length=50, blank=True, null=True)  # Example: kg, liters, units
 
