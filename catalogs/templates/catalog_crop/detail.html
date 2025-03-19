@@ -1,0 +1,70 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block appcontent %}
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box bg-success">
+        <div class="inner">
+          <h3>{{ total_activitys }}<sup style="font-size: 20px"> Cultivos(s)</sup></h3>
+        </div>
+        <div class="icon">
+          <i class="fas fa-home"></i>
+        </div>
+        <a href={% url 'erp:crop_list' farm.pk %} class="small-box-footer"> Administar Cultivos <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box bg-purple">
+        <div class="inner">
+          <h3>{{ total_crops }}<sup style="font-size: 20px"> Animales </sup></h3>
+        </div>
+        <div class="icon">
+          <i class="fas fa-home"></i>
+        </div>
+        <a href="" class="small-box-footer"> Administar Animales <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+      <div class="card-body">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="{{ action }}">
+        {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error al querer guardar el registro</h5>
+          <ul>
+            {% for field in form %}
+            {% for error in field.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+  </div>
+</div>
+</div>
+<script>
+  {% if form.errors %}
+  var errors = '';
+  {% for field in form %}
+  {% for error in field.errors %}
+  errors += '{{ error }}\n';
+  {% endfor %}
+  {% endfor %}
+  {% for error in form.non_field_errors %}
+  errors += '{{ error }}\n';
+  {% endfor %}
+  Swal.fire({
+    title: 'Error!',
+    text: errors,
+    icon: 'error'
+  });
+  {% endif %}
+</script>
+{% endblock %}

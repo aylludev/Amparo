@@ -1,21 +1,25 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
+from django.views.generic import DetailView, CreateView, DeleteView, UpdateView, ListView
 from erp.forms import AnimalForm
 from erp.models import Activity, Animal, Farm, Crop
 from django.urls import reverse_lazy
 from erp.mixins import ValidatePermissionRequiredMixin
 from django.http import JsonResponse
 
-class AnimalListView(LoginRequiredMixin, DetailView):
+class AnimalListView(LoginRequiredMixin, ListView):
     model = Animal
     template_name = 'animal/list.html'
-    context_object_name = 'farm'
+    context_object_name = 'animals'
 
+    def get_queryset(self):
+        # Obtiene el ID de la finca desde la URL
+        farm_id = self.kwargs['pk']
+        return Animal.objects.filter(farm_id=farm_id)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        farm = self.get_object()
-        context['animals'] = Animal.objects.filter(farm_id=farm)
+        context['farm'] = Farm.objects.get(id=self.kwargs['pk'])  # Pasar la finca al contexto
         return context
 
 class AnimalCreateView(LoginRequiredMixin, CreateView):

@@ -94,7 +94,7 @@ class Supply(models.Model):
         ('semilla', 'Semilla'),
         ('medicamento', 'Medicamento para animales'),
         ('otros', 'Otros')
-    ])
+    ], default='fertilizante')
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
     unit = models.CharField(max_length=50, blank=True, null=True)  # Example: kg, liters, units
 
