@@ -23,5 +23,6 @@ urlpatterns = [
     path('', IndexView.as_view(), name='homepage'),
     path('accounts/', include('accounts.urls')),
     path('erp/', include('erp.urls')),
+    path('reports/', include('reports.urls')),
     path('catalogs/', include('catalogs.urls')),
 ]

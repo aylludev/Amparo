@@ -15,7 +15,7 @@
           <a href={% url 'erp:activity_delete' activity.pk %} class="btn btn-danger btn-xs btn-flat"><i
               class="fas fa-trash"></i></a>
           <h3>{{ activity.name }}<sup style="font-size: 20px"></sup></h3>
-          <p>{{ activity.type }}/{{ activity.status }}</p>
+          <p>{{ activity.description }}/${{ activity.cash }}</p>
         </div>
         <div class="icon">
           <i class="fas fa-home"></i>

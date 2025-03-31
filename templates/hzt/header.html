@@ -22,12 +22,11 @@
                        class="nav-link dropdown-toggle"><i class="fas fa-folder-open"></i> Mantenimientos</a>
                     <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                         <li><a href="{% url 'erp:category_list' %}" class="dropdown-item"><i class="fas fa-truck-loading"></i> Categorías</a></li>
-                        <li><a href="{% url 'erp:product_list' %}" class="dropdown-item"><i class="fas fa-boxes"></i> Productos</a></li>
+                        <li><a href="{% url 'erp:product_list' %}" class="dropdown-item"><i class="fas fa-boxes"></i> Elementos</a></li>
                         <li><a href="{% url 'erp:client_list' %}" class="dropdown-item"><i class="fas fa-users"></i>Clientes</a></li>
                         <li><a href="{% url 'erp:sale_list' %}" class="dropdown-item"><i class="fas fa-shopping-cart"></i> Ventas</a></li>
                         <li><a href="{% url 'erp:cotization_list' %}" class="dropdown-item"><i class="fas fa-file-alt"></i> Cotizaciones </a></li>
                         <li><a href="{% url 'sale_report' %}" class="dropdown-item"><i class="fas fa-chart-bar"></i> Reporte de Ventas</a></li>
-                        <li><a href="{% url 'user:user_list' %}" class="dropdown-item"><i class="fas fa-user-friends"></i> Usuarios</a></li>
                     </ul>
                 </li>
             </ul>
@@ -58,17 +57,6 @@
                     <span class="dropdown-header" style="font-size: 12px;">
                         Sú último acceso fue {{ request.user.last_login }}
                     </span>
-                    <div class="dropdown-divider"></div>
-                    <a href="{% url 'user:user_profile' %}" class="dropdown-item">
-                        <i class="fas fa-edit mr-2"></i> Editar perfil
-                        <span class="float-right text-muted text-sm">3 mins</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="{% url 'user:user_change_password' %}" class="dropdown-item">
-                        <i class="fas fa-lock mr-2"></i> Editar password
-                        <span class="float-right text-muted text-sm">12 hours</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
                     <a href="#" class="dropdown-item dropdown-footer">
                         <p>Este sistema te permitira realizar diferentes actividades</p>
                     </a>

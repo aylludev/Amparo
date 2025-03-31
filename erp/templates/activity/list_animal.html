@@ -5,21 +5,21 @@
 
 <div class="container-fluid">
   <div class="row">
-    {% for variety in varieties %}
+    {% for activity in activitys %}
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-primary">
+      <div class="small-box bg-purple">
         <div class="inner">
-          <a href={% url 'catalogs:variety_edit' variety.pk %} class="btn btn-success btn-xs btn-flat"><i
+          <a href={% url 'erp:activity_edit' activity.pk %} class="btn btn-success btn-xs btn-flat"><i
               class="fas fa-edit"></i></a>
-          <a href={% url 'catalogs:variety_delete' variety.pk %} class="btn btn-danger btn-xs btn-flat"><i
+          <a href={% url 'erp:activity_delete' activity.pk %} class="btn btn-danger btn-xs btn-flat"><i
               class="fas fa-trash"></i></a>
-          <h3>{{ variety.name }}<sup style="font-size: 20px"></sup></h3>
+          <h3>{{ activity.name }}<sup style="font-size: 20px"></sup></h3>
+          <p>{{ activity.date }}/{{ activity.cash }}</p>
         </div>
         <div class="icon">
-          <i class="fas fa-seedling"></i>
+          <i class="bi bi-piggy-bank"></i>
         </div>
-        <a href="" class="small-box-footer">Administrar Variedades <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     {% endfor %}
@@ -27,12 +27,14 @@
       <!-- small box -->
       <div class="small-box btn-success">
         <div class="inner"> <br>
-          <h3>Crear una Variedad<sup style="font-size: 20px"></sup></h3>
+          <h3>Crear una Actividad<sup style="font-size: 20px"></sup></h3>
+          <p></p>
         </div>
         <div class="icon">
-          <i class="fas fa-seedling"></i>
+          <i class="bi bi-piggy-bank"></i>
         </div>
-        <a href={% url 'catalogs:variety_add' %} class="small-box-footer">Nueva Variedad <i class="fas fa-plus"></i></a>
+        <a href={% url 'erp:activityanimal_add' animal.pk %} class="small-box-footer">Nueva Actividad <i
+            class="fas fa-plus"></i></a>
       </div>
     </div>
     <div class="card-body">

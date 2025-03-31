@@ -1,7 +1,14 @@
-{% extends 'dashboard.html' %}
+{% extends 'layout.html' %}
 {% load widget_tweaks %}
 {% load static %}
-{% block appcontent %}
+{% block head %}
+    {% block head_form %}
+    <script src="{% static 'lib/moment-2.25.3/moment-with-locales.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js' %}"></script>
+    <link href="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet"/>
+    {% endblock %}
+{% endblock %}
+{% block content %}
     <form method="post" action="." enctype="multipart/form-data">
         <div class="card card-primary">
             <div class="card-header">
@@ -42,7 +49,7 @@
                 <button type="submit" class="btn btn-primary btn-flat">
                     <i class="fas fa-save"></i> Guardar registro
                 </button>
-                <a href="" class="btn btn-danger btn-flat">
+                <a href="{{ list_url }}" class="btn btn-danger btn-flat">
                     <i class="fas fa-times"></i> Cancelar
                 </a>
             </div>
@@ -82,7 +89,7 @@ $(function () {
             e.preventDefault();
             var parameters = new FormData(this);
             submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
-                location.href = '';
+                location.href = '{{ list_url }}';
             });
         });
     </script>

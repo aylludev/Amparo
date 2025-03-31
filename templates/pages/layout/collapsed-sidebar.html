@@ -37,15 +37,15 @@
 <!--end::Head-->
 <!--begin::Body-->
 
-<body class="layout-fixed dark-mode sidebar-expand-lg sidebar-mini sidebar-collapse bg-body-tertiary">
+<body class="layout-fixed sidebar-expand-lg sidebar-mini sidebar-collapse bg-body-tertiary">
   <!--begin::App Wrapper-->
   <div class="app-wrapper">
     <!--begin::Header-->
-    <nav class="app-header navbar navbar-expand navbar-dark">
+    <nav class="app-header navbar navbar-expand bg-primary">
       <!--begin::Container-->
       <div class="container-fluid">
         <!--begin::Start Navbar Links-->
-        <ul class="navbar-nav">
+        <ul class="navbar-nav bg-primary">
           <li class="nav-item d-none d-md-block"><a href={% url 'erp:dashboard' %} class="nav-link">Home</a></li>
           <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li>
         </ul>
@@ -141,15 +141,24 @@
           <li class="nav-item dropdown">
             <a class="nav-link" data-bs-toggle="dropdown" href="#">
               <i class="bi bi-bell-fill"></i>
-              <span class="navbar-badge badge text-bg-warning">15</span>
+              <span class="navbar-badge badge text-bg-warning">{{ pending_count }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-              <span class="dropdown-item dropdown-header">15 Notifications</span>
+              <span class="dropdown-item dropdown-header"> {{pending_count}} Notifications</span>
+              {% for activity in pending_activities %}
               <div class="dropdown-divider"></div>
               <a href="#" class="dropdown-item">
-                <i class="bi bi-envelope me-2"></i> 4 new messages
-                <span class="float-end text-secondary fs-7">3 mins</span>
+                <i class="fas fa-seedling"></i> {{ activity.name }} de {{ activity.crop.name }}
+                <span class="float-end text-secondary fs-7">{{ activity.date }}</span>
               </a>
+              {% endfor %}
+              {% for activity in pending_activities_animal %}
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item">
+                <i class="bi bi-piggy-bank"></i> {{ activity.name }} de {{ activity.crop.name }}
+                <span class="float-end text-secondary fs-7">{{ activity.date }}</span>
+              </a>
+              {% endfor %}
               <div class="dropdown-divider"></div>
               <a href="#" class="dropdown-item">
                 <i class="bi bi-people-fill me-2"></i> 8 friend requests
@@ -248,33 +257,13 @@
             </li>
             {% endif %}
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href={% url 'erp:dashboard' %} class="nav-link">
                 <i class="nav-icon bi bi-speedometer"></i>
                 <p>
                   Fincas
                   <i class="nav-arrow bi bi-chevron-right"></i>
                 </p>
               </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="../index.html" class="nav-link">
-                    <i class="nav-icon bi bi-circle"></i>
-                    <p>La Esperanza</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="../index2.html" class="nav-link">
-                    <i class="nav-icon bi bi-circle"></i>
-                    <p>El Espino</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="../index3.html" class="nav-link">
-                    <i class="nav-icon bi bi-circle"></i>
-                    <p>La Joya</p>
-                  </a>
-                </li>
-              </ul>
             </li>
             <li class="nav-item">
               <a href={% url 'erp:worker_list' %} class="nav-link">
@@ -283,24 +272,24 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href=# class="nav-link">
                 <i class="nav-icon bi bi-box-seam-fill"></i>
                 <p>
-                  Widgets
+                  Reportes
                   <i class="nav-arrow bi bi-chevron-right"></i>
                 </p>
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="../widgets/small-box.html" class="nav-link">
+                  <a href={% url 'erp:reports' %} class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
-                    <p>Small Box</p>
+                    <p>Grafico</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="../widgets/info-box.html" class="nav-link">
+                  <a href={% url 'sale_report' %} class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
-                    <p>info Box</p>
+                    <p>Ventas</p>
                   </a>
                 </li>
                 <li class="nav-item">
@@ -315,34 +304,34 @@
               <a href="#" class="nav-link active">
                 <i class="nav-icon bi bi-clipboard-fill"></i>
                 <p>
-                  Layout Options
+                  Ventas
                   <span class="nav-badge badge text-bg-secondary me-3">6</span>
                   <i class="nav-arrow bi bi-chevron-right"></i>
                 </p>
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="../layout/unfixed-sidebar.html" class="nav-link">
+                  <a href={% url 'erp:category_list' %} class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
-                    <p>Default Sidebar</p>
+                    <p>Categorias</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="../layout/fixed-sidebar.html" class="nav-link">
+                  <a href={% url 'erp:product_list' %} class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
-                    <p>Fixed Sidebar</p>
+                    <p>Elementos</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="../layout/layout-custom-area.html" class="nav-link">
+                  <a href={% url 'erp:sale_list' %} class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
-                    <p>Layout <small>+ Custom Area </small></p>
+                    <p>Ventas</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="../layout/sidebar-mini.html" class="nav-link">
+                  <a href={% url 'erp:client_list' %} class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
-                    <p>Sidebar Mini</p>
+                    <p>Clientes</p>
                   </a>
                 </li>
                 <li class="nav-item">

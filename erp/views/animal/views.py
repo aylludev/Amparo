@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView, ListView
 from erp.forms import AnimalForm
-from erp.models import Activity, Animal, Farm, Crop
+from erp.models import ActivityAnimal, Animal, Farm, Crop
 from django.urls import reverse_lazy
 from erp.mixins import ValidatePermissionRequiredMixin
 from django.http import JsonResponse
@@ -93,13 +93,13 @@ class AnimalDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Dele
         return context
 
 class AnimalDetailView(LoginRequiredMixin, DetailView):
-    model = Animal 
-    template_name = 'activity/list.html'
+    model = Animal
+    template_name = 'activity/list_animal.html'
     context_object_name = 'animal'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         animal = self.get_object()
-        context['activitys'] = Activity.objects.filter(animal_id=animal)
+        context['activitys'] = ActivityAnimal.objects.filter(crop_id=animal)
         context['total_activitys'] = len(context['activitys'])
         return context

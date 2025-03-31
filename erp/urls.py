@@ -5,12 +5,21 @@ from erp.views.crop.views import *
 from erp.views.worker.views import *
 from erp.views.activity.views import *
 from erp.views.animal.views import *
-
+from erp.views.activityanimal.views import *
+from erp.views.category.views import *
+from erp.views.client.views import *
+from erp.views.dashboard.views import *
+from erp.views.product.views import *
+from erp.views.sale.views import *
+from erp.views.cotization.view import *
+from erp.views.tests.views import TestView
+from erp.views.credit.view import *
 app_name = 'erp'
 
 urlpatterns = [
     # home
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
+    path('reports/', ReportView.as_view(), name='reports'),
     # farms
     path('farm/list/', FarmListView.as_view(), name='farm_list'),
     path('farm/add/', FarmCreateView.as_view(), name='farm_add'),
@@ -39,5 +48,43 @@ urlpatterns = [
     path('crops/<int:pk>/activity/add/', ActivityCreateView.as_view(), name='activity_add'),
     path('activity/delete/<int:pk>/', ActivityDeleteView.as_view(), name='activity_delete'),
     path('activity/update/<int:pk>/', ActivityUpdateView.as_view(), name='activity_edit'),
-    
+    # activityanimal
+    path('animal/<int:pk>/activity/list/', ActivityAnimalListView.as_view(), name='activityanimal_list'),
+    path('animal/<int:pk>/activity/add/', ActivityAnimalCreateView.as_view(), name='activityanimal_add'),
+    path('activityanimal/delete/<int:pk>/', ActivityAnimalDeleteView.as_view(), name='activityanimal_delete'),
+    path('activityanimal/update/<int:pk>/', ActivityAnimalUpdateView.as_view(), name='activityanimal_edit'),
+    # category
+    path('category/list/', CategoryListView.as_view(), name='category_list'),
+    path('category/add/', CategoryCreateView.as_view(), name='category_create'),
+    path('category/update/<int:pk>/', CategoryUpdateView.as_view(), name='category_update'),
+    path('category/delete/<int:pk>/', CategoryDeleteView.as_view(), name='category_delete'),
+    # client
+    path('client/list/', ClientListView.as_view(), name='client_list'),
+    path('client/add/', ClientCreateView.as_view(), name='client_create'),
+    path('client/update/<int:pk>/', ClientUpdateView.as_view(), name='client_update'),
+    path('client/delete/<int:pk>/', ClientDeleteView.as_view(), name='client_delete'),
+    # product
+    path('product/list/', ProductListView.as_view(), name='product_list'),
+    path('product/add/', ProductCreateView.as_view(), name='product_create'),
+    path('product/update/<int:pk>/', ProductUpdateView.as_view(), name='product_update'),
+    path('product/delete/<int:pk>/', ProductDeleteView.as_view(), name='product_delete'),
+    # home
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
+    # test
+    path('test/', TestView.as_view(), name='test'),
+    # sale
+    path('sale/list/', SaleListView.as_view(), name='sale_list'),
+    path('sale/add/', SaleCreateView.as_view(), name='sale_create'),
+    path('sale/delete/<int:pk>/', SaleDeleteView.as_view(), name='sale_delete'),
+    path('sale/update/<int:pk>/', SaleUpdateView.as_view(), name='sale_update'),
+    path('sale/invoice/pdf/<int:pk>/', SaleInvoicePdfView.as_view(), name='sale_invoice_pdf'),
+    # cotization
+    path('cotization/list/', CotizationListView.as_view(), name='cotization_list'),
+    path('cotization/add/', CotizationCreateView.as_view(), name='cotization_create'),
+    path('cotization/delete/<int:pk>/', CotizationDeleteView.as_view(), name='cotization_delete'),
+    path('cotization/update/<int:pk>/', CotizationUpdateView.as_view(), name='cotization_update'),
+    path('cotization/invoice/pdf/<int:pk>/', CotizationInvoicePdfView.as_view(), name='cotization_invoice_pdf'),
+    # credit 
+    path('credit/list/', CreditSaleListView.as_view(), name='credit_list'),
+    path('credit/payment/<int:pk>/', CreditPaymentView.as_view(), name='credit_payment')
 ]

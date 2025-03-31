@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from catalogs.models import Crop
+from catalogs.models import CatalogCrop
 
 # Create your views here.
 class DashboardView(LoginRequiredMixin, ListView):
@@ -9,7 +9,7 @@ class DashboardView(LoginRequiredMixin, ListView):
     context_object_name = 'farms'
     
     def get_queryset(self):
-        return Crop.objects.all()
+        return CatalogCrop.objects.all()
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

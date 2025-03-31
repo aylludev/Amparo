@@ -1,11 +1,11 @@
 from django import forms
 from django.forms import ModelForm
-from catalogs.models import Crop, AgricultureActivity, Variety
+from catalogs.models import CatalogCrop, CatalogAgricultureActivity, CatalogVariety, CatalogAnimal, CatalogRace, CatalogAnimalActivity
 
 class CropForm(ModelForm):
 
     class Meta:
-        model = Crop
+        model = CatalogCrop
         fields = '__all__'
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese un nombre'}),
@@ -14,9 +14,44 @@ class CropForm(ModelForm):
 class VarietyForm(ModelForm):
 
     class Meta:
-        model = Variety
-        fields = ['crop','name']
+        model = CatalogVariety
+        fields = ['name']
         widgets = {
-            'crop': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Ingrese un nombre'}),
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese un nombre'}),
+        }
+
+class ActivityForm(ModelForm):
+
+    class Meta:
+        model = CatalogAgricultureActivity
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese una Actividad'}),
+        }
+
+class AnimalForm(ModelForm):
+
+    class Meta:
+        model = CatalogAnimal
+        fields = '__all__'
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese un nombre'}),
+        }
+
+class RaceForm(ModelForm):
+
+    class Meta:
+        model = CatalogRace
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese una raza'}),
+        }
+
+class ActivityAForm(ModelForm):
+
+    class Meta:
+        model = CatalogAnimalActivity
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese una Actividad'}),
         }

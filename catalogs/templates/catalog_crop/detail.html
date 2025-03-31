@@ -4,50 +4,114 @@
 {% block appcontent %}
 
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-lg-3 col-6">
-      <!-- small box -->
-      <div class="small-box bg-success">
-        <div class="inner">
-          <h3>{{ total_activitys }}<sup style="font-size: 20px"> Cultivos(s)</sup></h3>
-        </div>
-        <div class="icon">
-          <i class="fas fa-home"></i>
-        </div>
-        <a href={% url 'erp:crop_list' farm.pk %} class="small-box-footer"> Administar Cultivos <i class="fas fa-arrow-circle-right"></i></a>
+    <div class="card card-secondary">
+      <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-seedling"></i> Variedades del Cultivo </h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse" title="Collapse">
+              <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+              <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-lte-toggle="card-remove" title="Remove">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+            <!-- /.card-body -->
+            {% for variety in varieties %}
+              <div class="col-lg-3 col-6">
+              <!-- small box -->
+                <div class="small-box bg-primary">
+                  <div class="inner">
+                    <a href={% url 'catalogs:variety_edit' variety.pk %} class="btn btn-success btn-xs btn-flat"><i class="fas fa-edit"></i></a>
+                    <a href={% url 'catalogs:variety_delete' variety.pk %} class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash"></i></a>
+                    <h3>{{ variety.name }}<sup style="font-size: 20px"></sup></h3>
+                  </div>
+                  <div class="icon"><i class="fas fa-seedling"></i></div>
+                    <a href="" class="small-box-footer">Administrar Variedad </a>
+                </div>
+              </div>
+            {% endfor %}
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box btn-success">
+                <div class="inner"> <br>
+                  <h3>Crear una Variedad<sup style="font-size: 20px"></sup></h3>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-seedling"></i>
+                </div>
+                <a href={% url 'catalogs:variety_add' crop.pk %} class="small-box-footer">Nueva Variedad <i class="fas fa-plus"></i></a>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
-    <div class="col-lg-3 col-6">
-      <!-- small box -->
-      <div class="small-box bg-purple">
-        <div class="inner">
-          <h3>{{ total_crops }}<sup style="font-size: 20px"> Animales </sup></h3>
-        </div>
-        <div class="icon">
-          <i class="fas fa-home"></i>
-        </div>
-        <a href="" class="small-box-footer"> Administar Animales <i class="fas fa-arrow-circle-right"></i></a>
+    <div class="card card-secondary">
+      <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-seedling"></i> Actividades del Cultivo </h3>
+        
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse" title="Collapse">
+              <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+              <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-lte-toggle="card-remove" title="Remove">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
       </div>
+      <div class="card-body">
+        <div class="row">
+            <!-- /.card-body -->
+            {% for activity in activities %}
+              <div class="col-lg-3 col-6">
+              <!-- small box -->
+                <div class="small-box bg-primary">
+                  <div class="inner">
+                    <a href={% url 'catalogs:activity_edit' activity.pk %} class="btn btn-success btn-xs btn-flat"><i class="fas fa-edit"></i></a>
+                    <a href={% url 'catalogs:activity_delete' activity.pk %} class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash"></i></a>
+                    <h3>{{ activity.name }}<sup style="font-size: 20px"></sup></h3>
+                  </div>
+                  <div class="icon"><i class="fas fa-seedling"></i></div>
+                    <a href="" class="small-box-footer">Administrar Variedad </a>
+                </div>
+              </div>
+            {% endfor %}
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box btn-success">
+                <div class="inner"> <br>
+                  <h3>Crear una Actividad<sup style="font-size: 20px"></sup></h3>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-seedling"></i>
+                </div>
+                <a href={% url 'catalogs:activity_add' crop.pk %} class="small-box-footer">Nueva Actividad <i class="fas fa-plus"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
       <div class="card-body">
         {% csrf_token %}
         <input type="hidden" name="action" value="{{ action }}">
         {% if form.errors %}
-        <div class="alert alert-danger alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error al querer guardar el registro</h5>
-          <ul>
-            {% for field in form %}
-            {% for error in field.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-            {% endfor %}
-          </ul>
-        </div>
+          <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error al querer guardar el registro</h5>
+              <ul>
+                {% for field in form %}
+                  {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                  {% endfor %}
+                {% endfor %}
+              </ul>
+          </div>
         {% endif %}
       </div>
-  </div>
-</div>
 </div>
 <script>
   {% if form.errors %}

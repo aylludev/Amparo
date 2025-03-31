@@ -8,19 +8,19 @@
     {% for animal in animals %}
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-primary">
+      <div class="small-box bg-purple">
         <div class="inner">
-          <a href={% url 'erp:crop_edit' animal.pk %} class="btn btn-success btn-xs btn-flat"><i
+          <a href={% url 'erp:animal_edit' animal.pk %} class="btn btn-success btn-xs btn-flat"><i
               class="fas fa-edit"></i></a>
-          <a href={% url 'erp:crop_delete' animal.pk %} class="btn btn-danger btn-xs btn-flat"><i
+          <a href={% url 'erp:animal_delete' animal.pk %} class="btn btn-danger btn-xs btn-flat"><i
               class="fas fa-trash"></i></a>
-          <h3>{{ crop.name }}<sup style="font-size: 20px"></sup></h3>
-          <p>{{ crop.variety }}/{{ crop.area }} Ha</p>
+          <h3>{{ animal.name }}<sup style="font-size: 20px"></sup></h3>
+          <p>{{ animal.type }}/{{ animal.raza }}</p>
         </div>
         <div class="icon">
-          <i class="fas fa-home"></i>
+          <i class="bi bi-piggy-bank"></i>
         </div>
-        <a href={% url 'erp:crop_detail' crop.pk %} class="small-box-footer">Administrar Cultivo <i
+        <a href={% url 'erp:animal_detail' animal.pk %} class="small-box-footer">Administrar Animal <i
             class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
@@ -29,13 +29,13 @@
       <!-- small box -->
       <div class="small-box btn-success">
         <div class="inner"> <br>
-          <h3>Crear un Cultivo<sup style="font-size: 20px"></sup></h3>
+          <h3>Crear un Animal<sup style="font-size: 20px"></sup></h3>
           <p><br></p>
         </div>
         <div class="icon">
-          <i class="fas fa-home"></i>
+          <i class="bi bi-piggy-bank"></i>
         </div>
-        <a href={% url 'erp:crop_add' farm.pk %} class="small-box-footer">Nuevo Cultivo <i
+        <a href={% url 'erp:animal_add' farm.pk %} class="small-box-footer">Registrar Animal <i
             class="fas fa-plus"></i></a>
       </div>
     </div>

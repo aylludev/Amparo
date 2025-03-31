@@ -16,56 +16,21 @@
               </div>
               <a href={% url 'catalogs:crop_list' %} class="small-box-footer">Catalogo de Cultivos <i class="fas fa-arrow-circle-right"></i></a>
             </div>
+            <div class="small-box bg-red">
+              <div class="inner">
+                <h3>{{ total_farms }}<sup style="font-size: 20px"> Animales </sup></h3>
+
+                <p>Administrar Animales</p>
+              </div>
+              <div class="icon">
+                <i class="bi bi-piggy-bank"></i>
+              </div>
+              <a href={% url 'catalogs:animal_list' %} class="small-box-footer">Catalogo de Animales <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
           </div>
         <div class="col-6">
           <!-- Default box -->
-          <div class="card">
-            <div class="card-header card-green">
-              <h3 class="card-title">Title</h3>
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse" title="Collapse">
-                    <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                    <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-lte-toggle="card-remove" title="Remove">
-                    <i class="bi bi-x-lg"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="card-body">Start creating your amazing application!</div>
-            <!-- /.card-body -->
-              <div class="card-footer">Footer</div>
-              <!-- /.card-footer-->
-              </div>
-            <!-- /.card -->
-            </div>
-        </div>
         <!--end::Row-->
     </div>
     <!--end::Container-->
-<h2>Gestión de Cultivos</h2>
-<a href="">➕ Agregar Cultivo</a>
-<a href="">➕ Agregar Variedad</a>
-<a href="">➕ Agregar Actividad</a>
-
-<h3>Lista de Cultivos</h3>
-<ul>
-  {% for cultivo in cultivos %}
-  <li>{{ cultivo.nombre }}</li>
-  {% endfor %}
-</ul>
-
-<h3>Lista de Variedades</h3>
-<ul>
-  {% for variedad in variedades %}
-  <li>{{ variedad.nombre }} ({{ variedad.cultivo.nombre }})</li>
-  {% endfor %}
-</ul>
-
-<h3>Lista de Actividades Agrícolas</h3>
-<ul>
-  {% for actividad in actividades %}
-  <li>{{ actividad.nombre }} - {{ actividad.cultivo.nombre }}</li>
-  {% endfor %}
-</ul>
 {% endblock %}
