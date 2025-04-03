@@ -94,7 +94,7 @@ class AnimalDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Dele
 
 class AnimalDetailView(LoginRequiredMixin, DetailView):
     model = Animal
-    template_name = 'activity/list_animal.html'
+    template_name = 'activityanimal/list.html'
     context_object_name = 'animal'
 
     def get_context_data(self, **kwargs):

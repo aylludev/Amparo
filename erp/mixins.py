@@ -25,6 +25,7 @@ class ValidatePermissionRequiredMixin(object):
 
     def get_perms(self):
         perms = []
+        print(perms)
         if isinstance(self.permission_required, str):
             perms.append(self.permission_required)
         else:
@@ -53,6 +54,7 @@ class ValidatePermissionRequiredMixin(object):
                 group = group_data  # Si ya es un objeto Group
 
             perms = self.get_perms()
+            print(perms)
             for p in perms:
                 if not group.permissions.filter(codename=p).exists():
                     messages.error(request, 'No tiene permiso para ingresar a este módulo')

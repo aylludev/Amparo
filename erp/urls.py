@@ -14,6 +14,9 @@ from erp.views.sale.views import *
 from erp.views.cotization.view import *
 from erp.views.tests.views import TestView
 from erp.views.credit.view import *
+from erp.views.suply.views import *
+from erp.views.equipment.views import *
+
 app_name = 'erp'
 
 urlpatterns = [
@@ -30,7 +33,7 @@ urlpatterns = [
     path('farm/<int:pk>/crops/', CropListView.as_view(), name='crop_list'),
     path('farm/<int:pk>/crops/add/', CropCreateView.as_view(), name='crop_add'),
     path('crops/delete/<int:pk>/', CropDeleteView.as_view(), name='crop_delete'),
-    path('crops/update/<int:pk>/', CropUpdateView.as_view(), name='crop_edit'),
+    path('farm/<int:farm_pk>/crops/update/<int:pk>/', CropUpdateView.as_view(), name='crop_edit'),
     path('crops/detail/<int:pk>/', CropDetailView.as_view(), name='crop_detail'),
     # animals 
     path('farm/<int:pk>/animals/', AnimalListView.as_view(), name='animal_list'),
@@ -43,8 +46,18 @@ urlpatterns = [
     path('worker/add/', WorkerCreateView.as_view(), name='worker_add'),
     path('worker/delete/<int:pk>/', WorkerDeleteView.as_view(), name='worker_delete'),
     path('worker/update/<int:pk>/', WorkerUpdateView.as_view(), name='worker_edit'),
+    # suply
+    path('suply/list/', SuplyListView.as_view(), name='suply_list'),
+    path('suply/add/', SuplyCreateView.as_view(), name='suply_create'),
+    path('suply/update/<int:pk>/', SuplyUpdateView.as_view(), name='suply_update'),
+    path('suply/delete/<int:pk>/', SuplyDeleteView.as_view(), name='suply_delete'),
+    # equipment
+    path('equipment/list/', EquipmentListView.as_view(), name='equipment_list'),
+    path('equipment/add/', EquipmentCreateView.as_view(), name='equipment_create'),
+    path('equipment/update/<int:pk>/', EquipmentUpdateView.as_view(), name='equipment_update'),
+    path('equipment/delete/<int:pk>/', EquipmentDeleteView.as_view(), name='equipment_delete'),
     # activitys
-    path('crops/<int:pk>/activity/list/', ActivityListView.as_view(), name='activity_list'),
+    path('crops/<int:pk>/activity/list/', CropDetailView.as_view(), name='activity_list'),
     path('crops/<int:pk>/activity/add/', ActivityCreateView.as_view(), name='activity_add'),
     path('activity/delete/<int:pk>/', ActivityDeleteView.as_view(), name='activity_delete'),
     path('activity/update/<int:pk>/', ActivityUpdateView.as_view(), name='activity_edit'),

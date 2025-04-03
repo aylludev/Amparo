@@ -8,17 +8,17 @@
     {% for activity in activitys %}
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-purple">
+      <div class="small-box bg-primary">
         <div class="inner">
           <a href={% url 'erp:activity_edit' activity.pk %} class="btn btn-success btn-xs btn-flat"><i
               class="fas fa-edit"></i></a>
           <a href={% url 'erp:activity_delete' activity.pk %} class="btn btn-danger btn-xs btn-flat"><i
               class="fas fa-trash"></i></a>
           <h3>{{ activity.name }}<sup style="font-size: 20px"></sup></h3>
-          <p>{{ activity.date }}/{{ activity.cash }}</p>
+          <p>{{ activity.description }}/${{ activity.cash }}</p>
         </div>
         <div class="icon">
-          <i class="bi bi-piggy-bank"></i>
+          <i class="fas fa-home"></i>
         </div>
       </div>
     </div>
@@ -31,29 +31,29 @@
           <p></p>
         </div>
         <div class="icon">
-          <i class="bi bi-piggy-bank"></i>
+          <i class="fas fa-home"></i>
         </div>
         <a href={% url 'erp:activityanimal_add' animal.pk %} class="small-box-footer">Nueva Actividad <i
             class="fas fa-plus"></i></a>
       </div>
     </div>
-    <div class="card-body">
-      {% csrf_token %}
-      <input type="hidden" name="action" value="{{ action }}">
-      {% if form.errors %}
-      <div class="alert alert-danger alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error al querer guardar el registro</h5>
-        <ul>
-          {% for field in form %}
-          {% for error in field.errors %}
-          <li>{{ error }}</li>
-          {% endfor %}
-          {% endfor %}
-        </ul>
+      <div class="card-body">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="{{ action }}">
+        {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error al querer guardar el registro</h5>
+          <ul>
+            {% for field in form %}
+            {% for error in field.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
       </div>
-      {% endif %}
-    </div>
   </div>
 </div>
 </div>

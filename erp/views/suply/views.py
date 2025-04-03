@@ -4,16 +4,13 @@ from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-
-from erp.forms import ProductForm
+from erp.forms import SuplyForm
 from erp.mixins import ValidatePermissionRequiredMixin
-from erp.models import Product
+from erp.models import Suply
 
-
-class ProductListView(LoginRequiredMixin, ListView):
-    model = Product
-    template_name = 'product/list.html'
-    permission_required = 'view_product'
+class SuplyListView(LoginRequiredMixin, ListView):
+    model = Suply
+    template_name = 'suply/list.html'
 
     def post(self, request, *args, **kwargs):
         data = {}
@@ -21,7 +18,7 @@ class ProductListView(LoginRequiredMixin, ListView):
             action = request.POST['action']
             if action == 'searchdata':
                 data = []
-                for i in Product.objects.filter(user=request.user):
+                for i in Suply.objects.filter(user=request.user):
                     data.append(i.toJSON())
             else:
                 data['error'] = 'Ha ocurrido un error'
@@ -31,18 +28,17 @@ class ProductListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Listado de Productos'
-        context['create_url'] = reverse_lazy('erp:product_create')
-        context['list_url'] = reverse_lazy('erp:product_list')
-        context['entity'] = 'Productos'
+        context['title'] = 'Listado de Insumos'
+        context['create_url'] = reverse_lazy('erp:suply_create')
+        context['list_url'] = reverse_lazy('erp:suply_list')
+        context['entity'] = 'Insumos'
         return context
 
-class ProductCreateView(LoginRequiredMixin, CreateView):
-    model = Product
-    form_class = ProductForm
-    template_name = 'product/create.html'
-    success_url = reverse_lazy('erp:product_list')
-    permission_required = 'add_product'
+class SuplyCreateView(LoginRequiredMixin, CreateView):
+    model = Suply
+    form_class = SuplyForm
+    template_name = 'suply/create.html'
+    success_url = reverse_lazy('erp:suply_list')
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
@@ -64,18 +60,17 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Creación de un Producto'
-        context['entity'] = 'Productos'
+        context['title'] = 'Creación de un Insumo'
+        context['entity'] = 'Insumos'
         context['list_url'] = self.success_url
         context['action'] = 'add'
         return context
 
-
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
-    model = Product
-    form_class = ProductForm
-    template_name = 'product/create.html'
-    success_url = reverse_lazy('erp:product_list')
+class SuplyUpdateView(LoginRequiredMixin, UpdateView):
+    model = Suply
+    form_class = SuplyForm
+    template_name = 'suply/create.html'
+    success_url = reverse_lazy('erp:suply_list')
     permission_required = 'change_product'
     url_redirect = success_url
 
@@ -98,17 +93,17 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Edición de un Producto'
-        context['entity'] = 'Productos'
+        context['title'] = 'Edición de un Insumo'
+        context['entity'] = 'Insumos'
         context['list_url'] = self.success_url
         context['action'] = 'edit'
         return context
 
 
-class ProductDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DeleteView):
-    model = Product
-    template_name = 'product/delete.html'
-    success_url = reverse_lazy('erp:product_list')
+class SuplyDeleteView(LoginRequiredMixin, DeleteView):
+    model = Suply
+    template_name = 'suply/delete.html'
+    success_url = reverse_lazy('erp:suply_list')
     permission_required = 'delete_product'
     url_redirect = success_url
 
@@ -127,7 +122,7 @@ class ProductDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Del
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Eliminación de un Producto'
-        context['entity'] = 'Productos'
+        context['title'] = 'Eliminación de un Insumo'
+        context['entity'] = 'Insumos'
         context['list_url'] = self.success_url
         return context

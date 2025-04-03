@@ -1,7 +1,7 @@
 from datetime import datetime
 from django import forms
 from django.forms import ModelForm
-from erp.models import ActivityAnimal, Animal, Crop, Farm, Activity, Worker, Category, Cotization, CreditPayment, Product, Client, Sale
+from erp.models import ActivityAnimal, Animal, Crop, Equipment, Farm, Activity, Suply, Worker, Category, Cotization, CreditPayment, Product, Client, Sale
 
 class CategoryForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -13,7 +13,7 @@ class CategoryForm(ModelForm):
 
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = ['name', 'desc']
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Ingrese un nombre',}),
             'desc': forms.Textarea(attrs={'placeholder': 'Ingrese un nombre', 'rows': 3, 'cols': 3 }),
@@ -39,7 +39,7 @@ class ProductForm(ModelForm):
 
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['name', 'cat', 'stock', 'purchase', 'pvp']
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Ingrese un nombre',}),
             'cat': forms.Select(attrs={'class': 'select2', 'style': 'width: 100%'}),
@@ -251,19 +251,23 @@ class WorkerForm(ModelForm):
 
 class ActivityForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs['autofocus'] = True
+        user = kwargs.pop('user', None)  # Extraer 'user' antes de llamar a super()
+        super(ActivityForm, self).__init__(*args, **kwargs)  # Llamar al constructor sin 'user'
+
+        if user:
+            # Filtrar insumos y trabajadores por usuario autenticado
+            self.fields['suplies'].queryset = Suply.objects.filter(user=user)
+            self.fields['workers'].queryset = Worker.objects.filter(user=user)
 
     class Meta:
         model = Activity
-        fields = 'name', 'description', 'date', 'status', 'workers', 'suplies', 'cash'
+        fields = 'name', 'description', 'date', 'status', 'workers', 'cash'
         widgets = {
             'name': forms.Select(attrs={'placeholder': 'Actividades', 'class': 'form-control'}),
             'description': forms.TextInput(attrs={'placeholder': 'Descripcion de la actividad', 'class':'form-control'}),
             'date': forms.DateInput(attrs={'class':'form-control',}),
             'status': forms.Select(attrs={'class': 'form-control',}),
             'workers': forms.SelectMultiple(attrs={'class': 'form-control select2', 'style': 'width: 100%', 'multiple': 'multiple' }),
-            'suplies': forms.SelectMultiple(attrs={'class': 'form-control select2', 'style': 'width: 100%', 'multiple': 'multiple' }),
             'cash': forms.NumberInput(attrs={'class': 'form-control', 'min':'0.1'})
         }
 
@@ -284,3 +288,56 @@ class ActivityAnimalForm(ModelForm):
             'suplies': forms.SelectMultiple(attrs={'class': 'form-control select2', 'style': 'width: 100%', 'multiple': 'multiple' }),
             'cash': forms.NumberInput(attrs={'class': 'form-control', 'min':'0.1'})
         }
+
+class SuplyForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['autofocus'] = True
+
+    class Meta:
+        model = Suply
+        fields = ['name', 'cat', 'stock', 'purchase']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Ingrese un nombre',}),
+            'cat': forms.Select(attrs={'class': 'select2', 'style': 'width: 100%'}),
+        }
+
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                form.save()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
+
+class EquipmentForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['autofocus'] = True
+
+    class Meta:
+        model = Equipment
+        fields = ['name', 'desc', 'status', 'purchase', 'costph']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Ingrese un nombre', 'class':'form-control'}),
+            'desc': forms.TextInput(attrs={'class':'form-control'}),
+            'status': forms.Select(attrs={'class':'form-control'}),
+            'purchase': forms.NumberInput(attrs={'class':'form-control', 'min':'0.1'}),
+            'costph': forms.NumberInput(attrs={'class':'form-control', 'min':'0.1'}),
+        }
+
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                form.save()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data

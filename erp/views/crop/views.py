@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 from erp.forms import CropForm
 from erp.models import Activity, Farm, Crop
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from erp.mixins import ValidatePermissionRequiredMixin
 from django.http import JsonResponse
 
@@ -22,7 +22,6 @@ class CropCreateView(LoginRequiredMixin, CreateView):
     model = Crop
     form_class = CropForm
     template_name = 'crop/create.html'
-    success_url = reverse_lazy('erp:farm_list')
     permission_required = 'add_farm'
     
     def form_valid(self, form):
@@ -39,27 +38,32 @@ class CropCreateView(LoginRequiredMixin, CreateView):
             data['error'] = str(e) 
         return super().form_valid(form)
     
+    def get_success_url(self):
+        return reverse('erp:crop_list', kwargs={'pk': self.kwargs.get('pk')})
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Creación un Cultivo'
         context['entity'] = 'Fincas'
         farm_id = self.kwargs.get('pk')
         context['farm'] = Farm.objects.get(id=farm_id)
+        context['list_url'] = reverse_lazy('erp:crop_list', kwargs={'pk': self.kwargs.get('pk')})
         context['action'] = 'add'
         return context
 
 class CropUpdateView(LoginRequiredMixin, UpdateView):
     model = Crop
     form_class = CropForm
-    template_name = 'farm/create.html'
-    success_url = reverse_lazy('erp:farm_list')
-    url_redirect = success_url
+    template_name = 'crop/create.html'
+    
+    def get_success_url(self):
+        return reverse('erp:crop_list', kwargs={'pk': self.object.farm.pk})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Edición un Cultivo'
         context['entity'] = 'Cultivo'
-        context['list_url'] = self.success_url
+        context['list_url'] = reverse_lazy('erp:crop_list', kwargs={'pk': self.object.farm.pk})
         context['action'] = 'edit'
         return context
 
@@ -98,4 +102,5 @@ class CropDetailView(LoginRequiredMixin, DetailView):
         crop = self.get_object()
         context['activitys'] = Activity.objects.filter(crop_id=crop)
         context['total_activitys'] = len(context['activitys'])
+        context['create_url'] = reverse_lazy('erp:activity_add', kwargs={'pk': self.object.pk})
         return context

@@ -9,7 +9,7 @@ from django.http import JsonResponse
 
 class ActivityAnimalListView(LoginRequiredMixin, DetailView):
     model = ActivityAnimal
-    template_name = 'activity/list_animal.html'
+    template_name = 'activityanimal/list.html'
     context_object_name = 'activity'
 
     def get_queryset(self):
@@ -25,7 +25,7 @@ class ActivityAnimalListView(LoginRequiredMixin, DetailView):
 class ActivityAnimalCreateView(LoginRequiredMixin, CreateView):
     model = ActivityAnimal
     form_class = ActivityAnimalForm
-    template_name = 'activity/create.html'
+    template_name = 'activityanimal/create.html'
     success_url = reverse_lazy('erp:farm_list')
     permission_required = 'add_farm'
     
@@ -53,7 +53,7 @@ class ActivityAnimalCreateView(LoginRequiredMixin, CreateView):
 class ActivityAnimalUpdateView(LoginRequiredMixin, UpdateView):
     model = ActivityAnimal
     form_class = ActivityAnimalForm
-    template_name = 'activity/create.html'
+    template_name = 'activityanimal/create.html'
     success_url = reverse_lazy('erp:farm_list')
     url_redirect = success_url
 
@@ -67,7 +67,7 @@ class ActivityAnimalUpdateView(LoginRequiredMixin, UpdateView):
 
 class ActivityAnimalDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DeleteView):
     model = ActivityAnimal
-    template_name = 'activity/delete.html'
+    template_name = 'activityanimal/delete.html'
     permission_required = 'delete_activity'
 
     def post(self, request, *args, **kwargs):

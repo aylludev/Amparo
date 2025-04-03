@@ -7,13 +7,12 @@
   <div class="row">
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-olive">
+      <div class="small-box bg-success">
         <div class="inner">
           <h3>{{ total_crops }}<sup style="font-size: 20px"> Cultivos(s)</sup></h3>
-          <p>{{ farm.name }}</p>
         </div>
         <div class="icon">
-          <i class="fas fa-seedling"></i>
+          <i class="fas fa-home"></i>
         </div>
         <a href={% url 'erp:crop_list' farm.pk %} class="small-box-footer"> Administar Cultivos <i class="fas fa-arrow-circle-right"></i></a>
       </div>
@@ -23,38 +22,11 @@
       <div class="small-box bg-purple">
         <div class="inner">
           <h3>{{ total_crops }}<sup style="font-size: 20px"> Animales </sup></h3>
-          <p>{{ farm.name }}</p>
         </div>
         <div class="icon">
-          <i class="fas fa-piggy-bank"></i>
+          <i class="fas fa-home"></i>
         </div>
-        <a href={% url 'erp:animal_list' farm.pk %} class="small-box-footer"> Administar Animales <i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <div class="col-lg-3 col-6">
-      <!-- small box -->
-      <div class="small-box bg-orange">
-        <div class="inner">
-          <h3>{{ total_crops }}<sup style="font-size: 20px"> Insumos </sup></h3>
-          <p>{{ farm.name }}</p>
-        </div>
-        <div class="icon">
-          <i class="fas fa-flask"></i>
-        </div>
-        <a href={% url 'erp:suply_list' %} class="small-box-footer"> Administar Insumos <i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <div class="col-lg-3 col-6">
-      <!-- small box -->
-      <div class="small-box bg-yellow">
-        <div class="inner">
-          <h3>{{ total_crops }}<sup style="font-size: 20px"> Equipos </sup></h3>
-          <p>{{ farm.name }}</p>
-        </div>
-        <div class="icon">
-          <i class="fas fa-tractor"></i>
-        </div>
-        <a href={% url 'erp:equipment_list' %} class="small-box-footer"> Administar Equipos <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="" class="small-box-footer"> Administar Animales <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
       <div class="card-body">

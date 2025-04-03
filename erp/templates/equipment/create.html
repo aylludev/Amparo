@@ -35,7 +35,7 @@
         </div>
       <div class="card-footer">
         <button type="submit" class="btn btn-primary btn-flat"><i class="fas fa-save"></i> Guardar registro </button>
-        <a href={% url 'erp:farm_list' %} class="btn btn-danger btn-flat"><i class="fas fa-times"></i> Cancelar</a>
+        <a href={% url 'erp:equipment_list' %} class="btn btn-danger btn-flat"><i class="fas fa-times"></i> Cancelar</a>
       </div>
     </div>
   </form>
@@ -91,5 +91,21 @@ document.addEventListener("DOMContentLoaded", function() {
                 icon: 'error'
             });
         {% endif %}
+
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("/erp/api/departments/")
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById("department");
+                select.innerHTML = "";
+                data.departments.forEach(dep => {
+                    const option = document.createElement("option");
+                    option.value = dep;
+                    option.textContent = dep;
+                    select.appendChild(option);
+                });
+            })
+            .catch(err => console.error("Failed to load departments:", err));
+    });
 </script>
 {% endblock %}

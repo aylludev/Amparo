@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 from django.db import models
 from accounts.models import CustomUser
 from django.forms import model_to_dict
@@ -7,7 +8,8 @@ from Amparo import settings
 from erp.choices import gender_choices
 
 class Category(models.Model):
-    name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="category")
+    name = models.CharField(max_length=150, verbose_name='Nombre')
     desc = models.CharField(max_length=500, null=True, blank=True, verbose_name='Descripción')
 
     def __str__(self):
@@ -24,9 +26,9 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="product")
+    name = models.CharField(max_length=150, verbose_name='Nombre')
     cat = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Categoría')
-    image = models.ImageField(upload_to='product/%Y/%m/%d', null=True, blank=True, verbose_name='Imagen')
     stock = models.IntegerField(default=0, verbose_name='Stock')
     purchase = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio de compra')
     pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio de venta')
@@ -43,11 +45,6 @@ class Product(models.Model):
         item['pvp'] = format(self.pvp, '.2f')
         return item
 
-    def get_image(self):
-        if self.image:
-            return '{}{}'.format(settings.MEDIA_URL, self.image)
-        return '{}{}'.format(settings.STATIC_URL, 'img/empty.png')
-
     class Meta:
         verbose_name = 'Producto'
         verbose_name_plural = 'Productos'
@@ -55,6 +52,8 @@ class Product(models.Model):
 
 
 class Client(models.Model):
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="client")
     names = models.CharField(max_length=150, verbose_name='Nombres')
     surnames = models.CharField(max_length=150, verbose_name='Apellidos')
     dni = models.CharField(max_length=10, unique=True, verbose_name='Cedula')
@@ -90,7 +89,7 @@ class Sale(models.Model):
         ('CREDIT', 'Crédito'),
         ('CASH', 'Contado'),
     ]
-
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="sale")
     cli = models.ForeignKey(Client, on_delete=models.CASCADE)
     date_joined = models.DateField(default=datetime.now)
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
@@ -250,14 +249,15 @@ class DetCotization(models.Model):
 
 class Farm(models.Model):
     name = models.CharField(max_length=255, verbose_name="Nombre")
-    country = models.CharField(max_length=100, default="Colombia", verbose_name="Pais")
+    country = models.CharField(max_length=100, default="Colombia", verbose_name="País")
     department = models.CharField(max_length=100, null=True, blank=True, verbose_name="Departmento")
     municipality = models.CharField(max_length=100, null=True, blank=True, verbose_name="Municipio")
     address = models.CharField(max_length=100, null=True, blank=True, verbose_name="Dirección")
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="farms")
-    area = models.DecimalField(default=0.0, max_digits=9, decimal_places=2, verbose_name="Áea")
+    area = models.DecimalField(default=0.0, max_digits=9, decimal_places=2, verbose_name="Área")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True, verbose_name="Activo")
 
     def toJSON(self):
         item = model_to_dict(self, exclude=['user'])
@@ -275,7 +275,8 @@ class Crop(models.Model):
     planting_date = models.DateField(verbose_name="Fecha de siembra")
     estimated_harvest_date = models.DateField(verbose_name="Fecha estimada de cosecha", blank=True, null=True)
     observations = models.TextField(verbose_name="Observaciones", blank=True, null=True)
-
+    is_active = models.BooleanField(default=True, verbose_name="Activo")
+    
     class Meta:
         verbose_name = "Cultivo"
         verbose_name_plural = "Cultivos"
@@ -290,7 +291,8 @@ class Animal(models.Model):
     type = models.ForeignKey(CatalogAnimal, on_delete=models.CASCADE, verbose_name="Tipo")
     raza = models.ForeignKey(CatalogRace, on_delete=models.CASCADE, verbose_name="Raza", blank=True, null=True)
     birthday_date = models.DateField(verbose_name="Fecha de nacimiento")
-
+    is_active = models.BooleanField(default=True, verbose_name="Activo")
+    
     class Meta:
         verbose_name = "Animal"
         verbose_name_plural = "Animales"
@@ -300,29 +302,32 @@ class Animal(models.Model):
         return f"{self.name}"
 
 class Worker(models.Model):
-    name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=20, blank=True, null=True)
-    salary = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    hired_date = models.DateField()
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="worker")
+    name = models.CharField(max_length=100, verbose_name="Nombre")
+    phone = models.CharField(max_length=20, blank=True, null=True, verbose_name="Telefono")
+    salary = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="Salario")
+    hired_date = models.DateField(verbose_name="Fecha de contratación")
+    is_active = models.BooleanField(default=True, verbose_name="Activo")
 
     def __str__(self):
         return self.name
 
-class Supply(models.Model):
-    name = models.CharField(max_length=100)
-    categoria = models.CharField(max_length=50, choices=[
-        ('fertilizante', 'Fertilizante'),
-        ('pesticida', 'Pesticida'),
-        ('alimento', 'Alimento para animales'),
-        ('semilla', 'Semilla'),
-        ('medicamento', 'Medicamento para animales'),
-        ('otros', 'Otros')
-    ], default='fertilizante')
-    quantity = models.DecimalField(max_digits=10, decimal_places=2)
-    unit = models.CharField(max_length=50, blank=True, null=True)  # Example: kg, liters, units
+class Suply(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="suply")
+    name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
+    cat = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Categoría')
+    stock = models.IntegerField(default=0, verbose_name='Stock')
+    purchase = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio de compra')
 
     def __str__(self):
-        return f"{self.name} ({self.quantity} {self.unit})"
+        return self.name
+
+    def toJSON(self):
+        item = model_to_dict(self, exclude=['user'])
+        item['full_name'] = '{} / {}'.format(self.name, self.cat.name)
+        item['cat'] = self.cat.toJSON()
+        item['purchase'] = format(self.purchase, '.2f')
+        return item
 
 class Activity(models.Model):
     STATUS_CHOICES = [
@@ -331,16 +336,24 @@ class Activity(models.Model):
         ('completed', 'Completado'),
     ]
     
-    crop = models.ForeignKey('Crop', on_delete=models.CASCADE, related_name="activities", null=True, blank=True)
+    crop = models.ForeignKey(Crop, on_delete=models.CASCADE, related_name="activities", null=True, blank=True)
     name = models.ForeignKey(CatalogAgricultureActivity, on_delete=models.CASCADE, related_name='crops', verbose_name='Nombre')
     description = models.TextField(verbose_name='Descripción')
     date = models.DateField(verbose_name='Fecha')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name='Estado')
-    workers = models.ManyToManyField(Worker, related_name='Trabajadores', verbose_name='Trabajadores')  # Could be a worker
-    suplies = models.ManyToManyField(Product, related_name='Insumos', verbose_name='Insumos',limit_choices_to={'cat__name': 'Insumos'})  # Could be a worker
+    workers = models.ManyToManyField(Worker, null=True, blank=True, related_name='activities', verbose_name='Trabajadores')  # Could be a worker
+    suplies = models.ManyToManyField(Suply, null=True, blank=True, related_name='activities', verbose_name='Insumos')  # Could be a worker
     cash = models.FloatField(verbose_name='Costo')
+    is_active = models.BooleanField(default=True, verbose_name="Activo")
 
     def __str__(self): return f"{self.description} - {self.get_status_display()}"
+
+    def toJSON(self):
+        item = model_to_dict(self, exclude=['crop', 'worker', 'suply'])
+        item['crop'] = self.crop.name
+        item['suply'] = self.suplies.toJSON()
+        item['cash'] = format(self.cash, '.2f')
+        return item
 
 class ActivityAnimal(models.Model):
     STATUS_CHOICES = [
@@ -354,8 +367,35 @@ class ActivityAnimal(models.Model):
     description = models.TextField(verbose_name='Descripción')
     date = models.DateField(verbose_name='Fecha')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name='Estado')
-    workers = models.ManyToManyField(Worker, related_name='Animal_Trabajadores', verbose_name='Trabajadores')  # Could be a worker
-    suplies = models.ManyToManyField(Product, related_name='Animal_Insumos', verbose_name='Insumos',limit_choices_to={'cat__name': 'Insumo'})  # Could be a worker
+    workers = models.ManyToManyField(Worker, null=True, blank=True, related_name='Animal_Trabajadores', verbose_name='Trabajadores')  # Could be a worker
+    suplies = models.ManyToManyField(Suply, null=True, blank=True, related_name='Animal_Insumos', verbose_name='Insumos',limit_choices_to={'cat__name': 'Insumo'})  # Could be a worker
     cash = models.FloatField(verbose_name='Costo')
+    is_active = models.BooleanField(default=True, verbose_name="Activo")
     
     def __str__(self): return f"{self.description} - {self.get_status_display()}"
+
+class Equipment(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # Relación con usuario
+    name = models.CharField(max_length=100, verbose_name='Nombre')  # Nombre del equipo
+    desc = models.TextField(blank=True, null=True, verbose_name='Descripción')  # Descripción opcional
+    status = models.CharField(
+        max_length=20,
+        choices=[('activo', 'Activo'), ('inactivo', 'Inactivo'), ('en reparación', 'En reparación')],
+        default='activo',
+        verbose_name='Estado'
+    )  # Estado del equipo
+    purchase = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='Precio de compra')  # Fecha de compra
+    costph = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, null=True, blank=True, verbose_name='Costo por Hora')  # Costo del equipo
+
+    def toJSON(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'status': self.status,
+            'purchase_date': self.purchase_date.strftime('%Y-%m-%d') if self.purchase_date else None,
+            'cost': float(self.cost)  # Convertir Decimal a float
+        }
+
+    def __str__(self):
+        return self.name

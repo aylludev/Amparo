@@ -2,7 +2,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from erp.forms import FarmForm
-from erp.mixins import ValidatePermissionRequiredMixin
 from erp.models import Crop, Farm
 
 class FarmListView(LoginRequiredMixin, ListView):
@@ -58,13 +57,11 @@ class FarmUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
 
-class FarmDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DeleteView):
+class FarmDeleteView(LoginRequiredMixin, DeleteView):
     model = Farm
     template_name = 'farm/delete.html'
     success_url = reverse_lazy('erp:farm_list')
-    permission_required = 'delete_farm'
     url_redirect = success_url
-    permission_required = 'farm.delete_farm'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

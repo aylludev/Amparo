@@ -28,6 +28,11 @@ class ActivityCreateView(LoginRequiredMixin, CreateView):
     template_name = 'activity/create.html'
     success_url = reverse_lazy('erp:farm_list')
     permission_required = 'add_farm'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user  # Pasar el usuario al formulario
+        return kwargs  
     
     def form_valid(self, form):
         data = {}
